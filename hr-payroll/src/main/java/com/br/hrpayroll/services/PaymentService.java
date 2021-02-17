@@ -1,15 +1,36 @@
 package com.br.hrpayroll.services;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.br.hrpayroll.entities.Payment;
+import com.br.hrpayroll.entities.Worker;
 
 @Service
 public class PaymentService {
 
 	
-	public Payment getPayment(long workerId , int days) {
-		return new Payment("Bob", 200.0, days);
+	@Value("${hr-worker.host}")
+	private String host;
+	
+	
+	@Autowired
+	private RestTemplate restTemplate;
+	
+	
+	
+	public Payment getPayment(Long workerId , int days) {
+		
+		Map<String, String> params = new HashMap<>();
+		params.put("id", workerId.toString());
+		
+		Worker worker =  restTemplate.getForObject(host + "/workers/{id}", Worker.class, params);
+		return new Payment(worker.getName() , worker.getDailyIncome() , days);
 	}
 	
 	
