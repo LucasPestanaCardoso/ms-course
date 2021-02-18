@@ -10,7 +10,7 @@ import com.br.hrpayroll.entities.Worker;
 
 
 @Component
-@FeignClient(name = "hr-worker",  path = "/workers")
+@FeignClient(name = "hr-worker", /* url = Não precisa mais registrar a url por causa do Eureka*/   path = "/workers")
 public interface WorkerFeignClient {
 
 	@GetMapping(value = "/{id}")
